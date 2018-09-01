@@ -8,6 +8,7 @@ import java.net.Socket;
 
 import vcampus.util.SocketConnection;
 import vcampus.vo.LoginFormEvent;
+import vcampus.vo.SocketMessage;
 
 public class LoginBiz {
 	public static void runServer() throws IOException, ClassNotFoundException {
@@ -52,7 +53,10 @@ public class LoginBiz {
 	private static void handleClientSocket(Socket clientSocket) throws IOException, ClassNotFoundException, InterruptedException {
 		ObjectInputStream ois;
 		ois = new ObjectInputStream(clientSocket.getInputStream());
-		LoginFormEvent login = (LoginFormEvent) ois.readObject();
+		SocketMessage messageReceived = (SocketMessage) ois.readObject();
+		LoginFormEvent login = (LoginFormEvent) messageReceived.getObj();
+		
+		//login check
 		boolean loginSucceedFlag = false;
 		if(login.getUsername().equals("admin") && login.getPassword().equals("admin")) {
 			loginSucceedFlag = true;
@@ -61,10 +65,13 @@ public class LoginBiz {
 		}
 		PrintStream printStream = new PrintStream(clientSocket.getOutputStream());
 		printStream.print(loginSucceedFlag);
-		for(int i=0; i<3; i++) {
-			System.out.println("hello");
-			Thread.sleep(5000);
+		for(int i=0; i<5; i++) {
+			System.out.println(i);
+			Thread.sleep(3000);
 		}
+		//login check
+		
+		
 		//TODO close client socket
 		clientSocket.close();
 	}
