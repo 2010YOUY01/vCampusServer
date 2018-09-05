@@ -6,6 +6,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import vcampus.biz.MainServer;
+import vcampus.biz.Server;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
@@ -17,6 +21,7 @@ import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Timer;
 import java.awt.event.ActionEvent;
 
@@ -24,10 +29,11 @@ public class ServerGUI extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textOnlineNum;
-	private JTextField textIP;
 	private JTextField textPort;
-	private ServerListener serverListener;
+	private Server server;
 	private JTextArea textArea;
+	private JButton btnLogin;
+	private JButton btnLogout;
 	
 
 	/**
@@ -38,6 +44,10 @@ public class ServerGUI extends JFrame {
 			public void run() {
 				try {
 					ServerGUI frame = new ServerGUI();
+					Server server1 = new Server();
+					server1.setServerGUI(frame);
+					frame.setServer(server1);
+					
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -45,10 +55,15 @@ public class ServerGUI extends JFrame {
 			}
 		});
 	}
-
 	/**
 	 * Create the frame.
 	 */
+	
+	public void createServer() {
+		server = new Server();
+		server.setServerGUI(this);
+	}
+	
 	public ServerGUI () {
 		setTitle("vCampus Server");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -61,17 +76,11 @@ public class ServerGUI extends JFrame {
 		
 		JLabel label_1 = new JLabel("\u5728\u7EBF\u4EBA\u6570");
 		
-		JLabel label_2 = new JLabel("\u670D\u52A1\u5668\u5730\u5740");
-		
 		JLabel label_3 = new JLabel("\u76D1\u542C\u7AEF\u53E3");
 		
 		textOnlineNum = new JTextField();
 		textOnlineNum.setEditable(false);
 		textOnlineNum.setColumns(10);
-		
-		textIP = new JTextField();
-		textIP.setEditable(false);
-		textIP.setColumns(10);
 		
 		textPort = new JTextField();
 		textPort.setEditable(false);
@@ -81,20 +90,33 @@ public class ServerGUI extends JFrame {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		
-		JButton btnLogin = new JButton("\u542F\u52A8\u670D\u52A1\u5668");
+		btnLogin = new JButton("\u542F\u52A8\u670D\u52A1\u5668");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				fireLoginServer();
+				// OK start the server
+				// ceate a new Server
+				createServer();
+				// and start it as a thread
+				new ServerRunning().start();
+				btnLogin.setEnabled(false);
+				btnLogout.setEnabled(true);
 			}
 		});
+		
+		
 		
 		//JLabel timeLabel = new JLabel("New label");
 		ClockLabel timeLabel = new ClockLabel("time");
 		
-		JButton btnLogout = new JButton("\u5173\u95ED\u670D\u52A1\u5668");
+		btnLogout = new JButton("\u5173\u95ED\u670D\u52A1\u5668");
+		btnLogout.setEnabled(false);
 		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				fireLogoutServer();
+				server.stopServer();
+				server = null;
+				btnLogin.setEnabled(true);
+				btnLogout.setEnabled(false);
+				return;
 			}
 		});
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
@@ -105,16 +127,14 @@ public class ServerGUI extends JFrame {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(label_2)
-								.addComponent(label_3)
 								.addComponent(label)
-								.addComponent(label_1))
-							.addGap(18)
+								.addComponent(label_1)
+								.addComponent(label_3))
+							.addGap(32)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
 								.addComponent(textOnlineNum, GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
-								.addComponent(textPort, GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
-								.addComponent(textIP, GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
-								.addComponent(timeLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+								.addComponent(timeLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(textPort, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE))
 							.addGap(71))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(btnLogin)
@@ -141,15 +161,11 @@ public class ServerGUI extends JFrame {
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 								.addComponent(label_1)
 								.addComponent(textOnlineNum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGap(18)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(label_2)
-								.addComponent(textIP, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(label_3)
-								.addComponent(textPort, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(33)
+								.addComponent(textPort, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(label_3))
+							.addGap(36)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 								.addComponent(btnLogin)
 								.addComponent(btnLogout)))
@@ -164,36 +180,13 @@ public class ServerGUI extends JFrame {
 		contentPane.setLayout(gl_contentPane);
 	}
 	
-	public void fireLoginServer() {
-		if(this.serverListener == null) {
-			System.out.println("nullPtr in fireLoginServer");
-		}
-		else {
-			this.serverListener.LoginServerPerformed();
-		}
-	}
-	
-	public void fireLogoutServer() {
-		if(this.serverListener == null) {
-			System.out.println("nullPtr in fireLogoutServer");
-		}
-		else {
-			this.serverListener.LogoutServerPerformed();
-		}
-	}
 
-
-	public void setServerListener(ServerListener serverListener) {
-		this.serverListener = serverListener;
-	}
 
 	public JTextField getTextOnlineNum() {
 		return textOnlineNum;
 	}
 
-	public JTextField getTextIP() {
-		return textIP;
-	}
+
 
 	public JTextField getTextPort() {
 		return textPort;
@@ -202,7 +195,28 @@ public class ServerGUI extends JFrame {
 	public JTextArea getTextArea() {
 		return textArea;
 	}
+	
+	
 
+
+	public void setServer(Server server) {
+		this.server = server;
+	}
+
+	class ServerRunning extends Thread {
+		public void run() {
+			try {
+				
+				server.runServer();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}         // should execute until if fails
+			// the server failed
+			System.out.println("server failed");
+			server = null;
+		}
+	}
 
 	
 	

@@ -2,9 +2,16 @@ package vcampus.vo;
 
 import java.io.Serializable;
 
+
+//this file should always be the same as the one in vCampusClient
 public class SocketMessage implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6732448309933765982L;
 	//uid to be implemented
 	private int uid = 0;
+	private int username = 0;
 	private int code = 0;
 	public enum TYPE{
 		LOGINCHECK, LOGINSUCCEED, LOGINFAIL;

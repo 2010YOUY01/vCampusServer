@@ -5,6 +5,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import vcampus.dao.LoginDAO;
+import vcampus.vo.LoginFormEvent;
 import vcampus.vo.SocketMessage;
 import vcampus.vo.SocketMessage.TYPE;
 
@@ -13,8 +15,8 @@ public class ClientThread extends Thread {
 	private Socket clientSocket;
 	private ObjectInputStream ois = null;
 	private ObjectOutputStream oos = null;
-	private ThreadEndListener threadEndListener;
-
+	private ThreadListener threadListener;
+	private boolean runThreadFlag;
 	public ClientThread(Socket clientSocket, int id) throws IOException {
 		this.clientSocket = clientSocket;
 		this.id = id;
@@ -26,28 +28,46 @@ public class ClientThread extends Thread {
 		System.out.println(id+ "in");
 		try {
 			ois = new ObjectInputStream(clientSocket.getInputStream());
+			oos = new ObjectOutputStream(clientSocket.getOutputStream());
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
-		boolean runThreadFlag = true;
+		runThreadFlag = true;
 		while (runThreadFlag) {
 			SocketMessage messageReceived = null;
 			try {
+				//read message Obj from socket
 				messageReceived = (SocketMessage) ois.readObject();
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			//useDAO to verify username and password
+			LoginDAO loginDAO = new LoginDAO();
 			if((messageReceived.getType()) == SocketMessage.TYPE.LOGINCHECK) {
-				System.out.println("loginCheck");
+				//display LOG on GUI
+				threadListener.displayLog("Login");
+				LoginFormEvent loginFormEvent = (LoginFormEvent) messageReceived.getObj();
+				System.out.println("before dao");
+				boolean loginSucceedFlag = loginDAO.LoginCheck(loginFormEvent);
+				SocketMessage messageBack = new SocketMessage();
+				//set msg according to the flag
+				if(loginSucceedFlag) {
+					messageBack.setType(SocketMessage.TYPE.LOGINSUCCEED);
+				}
+				else {
+					messageBack.setType(SocketMessage.TYPE.LOGINFAIL);
+				}
+				
+				//send back the msg
 				try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+					oos.writeObject(messageBack);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 				break;
 			}
@@ -59,8 +79,10 @@ public class ClientThread extends Thread {
 			}
 
 		}
+		
+		
 		System.out.println(id+ "out");
-		threadEndListener.threadEnd(id);
+		threadListener.threadEnd(id);
 		try {
 			if(ois != null)
 				ois.close();
@@ -70,16 +92,33 @@ public class ClientThread extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		
 	}
 
-	public void setThreadEndListener(ThreadEndListener threadEndListener) {
-		this.threadEndListener = threadEndListener;
+	public void setThreadListener(ThreadListener threadListener) {
+		this.threadListener = threadListener;
 	}
 
 	public int getID() {
 		return id;
 	}
+
+	public Socket getClientSocket() {
+		return clientSocket;
+	}
+
+
+	public ObjectInputStream getOis() {
+		return ois;
+	}
+
+
+	public ObjectOutputStream getOos() {
+		return oos;
+	}
+
+	
 	
 	
 	

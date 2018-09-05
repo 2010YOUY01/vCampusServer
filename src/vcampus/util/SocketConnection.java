@@ -6,7 +6,7 @@ import java.net.Socket;
 
 public class SocketConnection {
 	static SocketConnection obj = new SocketConnection();
-	private int portNum = 8508;
+	private int portNum = 8308;
 	private String serverAddress = "127.0.0.1";
 	private ServerSocket serverSocket = null;
 	private Socket socket = null;

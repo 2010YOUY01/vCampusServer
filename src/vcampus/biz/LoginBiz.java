@@ -19,7 +19,8 @@ public class LoginBiz {
 		try {
 			// start listening on port 
 			ServerSocket serverSocket = socketConnection.getServerSocket();
-			System.out.println("start listening");
+			System.out.println(serverSocket + "start listening");
+			
 			//keep listening on port
 			while(true) {
 				final Socket clientSocket = serverSocket.accept();
