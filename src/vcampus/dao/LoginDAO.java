@@ -23,4 +23,13 @@ public class LoginDAO {
 		
 		return registerSucceedFlag;
 	}
+	
+	//ĞŞ¸ÄÃÜÂë
+	public boolean changePassword(RegisterForm registerForm) {
+		boolean changePswSucceed = true;
+		
+		
+		return changePswSucceed;
+	}
+	
 }
