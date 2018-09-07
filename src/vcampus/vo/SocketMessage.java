@@ -11,16 +11,18 @@ public class SocketMessage implements Serializable{
 	private static final long serialVersionUID = -6732448309933765982L;
 	//uid to be implemented
 	private int uid = 0;
-	private int username = 0;
+	private String username = "0";
 	private int code = 0;
 	public enum TYPE{
-		LOGINCHECK, LOGINSUCCEED, LOGINFAIL;
+		LOGINCHECK, LOGINSUCCEED, LOGINFAIL,
+		REGISTER, REGISTERSUCCEED, REGISTERFAIL;
 	}
 	private TYPE type;
 	private Object obj = null;
 		
-	public SocketMessage() {
-
+	public SocketMessage(String username, TYPE type) {
+		this.username = username;
+		this.type = type;
 	}
 
 	public int getUid() {

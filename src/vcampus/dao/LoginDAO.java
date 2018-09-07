@@ -9,6 +9,8 @@ public class LoginDAO {
 	public boolean LoginCheck(LoginFormEvent loginFormEvent) {
 		boolean loginSucceedFlag = false;
 		//TODO implement DAO
+		System.out.println(loginFormEvent.getUsername());
+		System.out.println(loginFormEvent.getPassword());
 		if(loginFormEvent.getUsername().equals("admin") && loginFormEvent.getPassword().equals("admin")) {
 			loginSucceedFlag = true;
 		}
@@ -19,7 +21,12 @@ public class LoginDAO {
 	//注意username为唯一学号，如果数据库中有重复，则注册失败
 	public boolean Register(RegisterForm registerForm) {
 		boolean registerSucceedFlag = false;
-		
+		if(registerForm.getUserName().equals("admin")) {
+			registerSucceedFlag = false;
+		}
+		else {
+			registerSucceedFlag = true;
+		}
 		
 		return registerSucceedFlag;
 	}

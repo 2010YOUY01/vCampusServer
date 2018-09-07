@@ -14,7 +14,6 @@ public class Course {
 	private WEEKDAY timeInWeek;
 	private COURSETIME timeInDay;
 	public Course(int uID, String className, String teacher, WEEKDAY timeInWeek, COURSETIME timeInDay) {
-		super();
 		this.uID = uID;
 		this.className = className;
 		this.teacher = teacher;

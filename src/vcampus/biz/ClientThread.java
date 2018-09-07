@@ -33,10 +33,10 @@ public class ClientThread extends Thread {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+		SocketMessage messageReceived = null;
+		SocketMessage messageBack = null;
 		runThreadFlag = true;
 		while (runThreadFlag) {
-			SocketMessage messageReceived = null;
 			try {
 				//read message Obj from socket
 				messageReceived = (SocketMessage) ois.readObject();
@@ -45,39 +45,19 @@ public class ClientThread extends Thread {
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-			//useDAO to verify username and password
-			LoginDAO loginDAO = new LoginDAO();
-			if((messageReceived.getType()) == SocketMessage.TYPE.LOGINCHECK) {
-				//display LOG on GUI
-				threadListener.displayLog("Login");
-				LoginFormEvent loginFormEvent = (LoginFormEvent) messageReceived.getObj();
-				System.out.println("before dao");
-				boolean loginSucceedFlag = loginDAO.LoginCheck(loginFormEvent);
-				SocketMessage messageBack = new SocketMessage();
-				//set msg according to the flag
-				if(loginSucceedFlag) {
-					messageBack.setType(SocketMessage.TYPE.LOGINSUCCEED);
-				}
-				else {
-					messageBack.setType(SocketMessage.TYPE.LOGINFAIL);
-				}
-				
-				//send back the msg
-				try {
-					oos.writeObject(messageBack);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				break;
+			
+			
+			messageBack = MessageHandling.handleMessage(messageReceived);
+			
+			
+			//send back the msg
+			try {
+				oos.writeObject(messageBack);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
-			else if((messageReceived.getType()) == SocketMessage.TYPE.LOGINSUCCEED){
-				System.out.println("other");
-			}
-			else if((messageReceived.getType()) == SocketMessage.TYPE.LOGINFAIL){
-				runThreadFlag = false;
-			}
-
+			break;
 		}
 		
 		
