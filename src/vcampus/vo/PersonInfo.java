@@ -1,8 +1,9 @@
 package vcampus.vo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class PersonInfo {
+public class PersonInfo implements Serializable{
 	private String username;//09017314
 	private String name;//王旭明
 	private int age;//21
@@ -15,11 +16,11 @@ public class PersonInfo {
 	}
 	private SCHOOL school;//计算机
 	//Date class useage:
-	//Date brithday = new Date();
-	//birthday.setYear(1998);birthday.setMonth(8);birthday.setDay(18);
+	//Date brithday = new Date(1998, 8, 18);
 	//birthday.getYear();.....
 	private Date birthday; //1998 8 18
 	private String City;// 江苏南京
+	private String loc;
 	
 	public static void main(String[] args) {
 		Date date = new Date();
@@ -30,7 +31,10 @@ public class PersonInfo {
 		
 	}
 
-	public PersonInfo(String username, String name, int age, GENDER gender, SCHOOL school, Date birthday, String city) {
+	
+
+	public PersonInfo(String username, String name, int age, GENDER gender, SCHOOL school, Date birthday, String city,
+			String loc) {
 		super();
 		this.username = username;
 		this.name = name;
@@ -39,7 +43,10 @@ public class PersonInfo {
 		this.school = school;
 		this.birthday = birthday;
 		City = city;
+		this.loc = loc;
 	}
+
+
 
 	public String getUsername() {
 		return username;
@@ -95,6 +102,18 @@ public class PersonInfo {
 
 	public void setCity(String city) {
 		City = city;
+	}
+
+
+
+	public String getLoc() {
+		return loc;
+	}
+
+
+
+	public void setLoc(String loc) {
+		this.loc = loc;
 	}
 	
 	

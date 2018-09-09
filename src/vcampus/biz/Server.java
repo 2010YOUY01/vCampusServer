@@ -21,55 +21,56 @@ public class Server implements ThreadListener {
 	private boolean runningFlag;
 	private ServerGUI serverGUI;
 	private ServerSocket serverSocket;
-	
-	//initialize server
+	private static int size = 0;
+
+	// initialize server
 	public Server() {
 		clientThreadList = new ArrayList<ClientThread>();
 		port = SocketConnection.getInstance().getPortNum();
 	}
-	
+
 	public void runServer() throws IOException {
 		runningFlag = true;
-		while(runningFlag) {
-			ServerSocket serverSocket = new ServerSocket(port);
-			while(runningFlag) {
-				System.out.println("Server wating on port "+port);
-				Socket clientSocket = serverSocket.accept();
-				
-				// if i asked to stop
-				if(!runningFlag) {
-					break;
-				}
-				//use accepted socket to create a new client thread
-				System.out.println("dealing with clientSocket");
-				ClientThread clientThread = new ClientThread(clientSocket, ++uID);
-				clientThread.setThreadListener(this);
-				//add the thread to list
-				clientThreadList.add(clientThread);
-				serverGUI.getTextOnlineNum().setText(clientThreadList.size()+"");
-				clientThread.start();			
+
+		ServerSocket serverSocket = new ServerSocket(port);
+		while (runningFlag) {
+			System.out.println("Server wating on port " + port);
+			Socket clientSocket = serverSocket.accept();
+
+			// if i asked to stop
+			if (!runningFlag) {
+				break;
 			}
-			
-			//close server socket
-			//close all client sockets
-			serverSocket.close();
-			for(int i=0; i<clientThreadList.size(); i++) {
-				ClientThread tmpClientThread = clientThreadList.get(i);
-				if(tmpClientThread.getOis() != null) {
-					tmpClientThread.getOis().close();
-				}
-				if(tmpClientThread.getOos() != null) {
-					tmpClientThread.getOos().close();
-				}
-				tmpClientThread.getClientSocket().close();
-				tmpClientThread.interrupt();
-			}
-			serverGUI.getTextOnlineNum().setText(clientThreadList.size()+"");
-			System.out.println("close server");
+			// use accepted socket to create a new client thread
+			System.out.println("dealing with clientSocket");
+			ClientThread clientThread = new ClientThread(clientSocket, ++uID);
+			size++;
+			clientThread.setThreadListener(this);
+			// add the thread to list
+			clientThreadList.add(clientThread);
+			serverGUI.getTextOnlineNum().setText(size + "");
+			clientThread.start();
 		}
+
+		// close server socket
+		// close all client sockets
+		serverSocket.close();
+		for (int i = 0; i < clientThreadList.size(); i++) {
+			ClientThread tmpClientThread = clientThreadList.get(i);
+			if (tmpClientThread.getOis() != null) {
+				tmpClientThread.getOis().close();
+			}
+			if (tmpClientThread.getOos() != null) {
+				tmpClientThread.getOos().close();
+			}
+			tmpClientThread.getClientSocket().close();
+			tmpClientThread.interrupt();
+		}
+		serverGUI.getTextOnlineNum().setText(size + "");
+		System.out.println("close server");
 	}
-	
-	public void stopServer()  {
+
+	public void stopServer() {
 		System.out.println("in stop server");
 		runningFlag = false;
 		Socket s;
@@ -78,9 +79,9 @@ public class Server implements ThreadListener {
 		} catch (UnknownHostException e) {
 			System.out.println("unknownhost");
 		} catch (IOException e) {
-			//System.out.println("ioexception");
+			// System.out.println("ioexception");
 		}
-		
+
 	}
 
 	public void setServerGUI(ServerGUI serverGUI) {
@@ -89,11 +90,11 @@ public class Server implements ThreadListener {
 
 	@Override
 	public void threadEnd(int id) {
-		for(int i=0; i<clientThreadList.size(); i++) {
+		for (int i = 0; i < clientThreadList.size(); i++) {
 			ClientThread tmpThread = clientThreadList.get(i);
-			if(tmpThread.getID() == id) {
+			if (tmpThread.getID() == id) {
 				clientThreadList.remove(i);
-				serverGUI.getTextOnlineNum().setText(clientThreadList.size()+"");
+				serverGUI.getTextOnlineNum().setText(size + "");
 				return;
 			}
 		}
@@ -106,10 +107,5 @@ public class Server implements ThreadListener {
 		String time = dateFormat.format(calendar.getTime());
 		serverGUI.getTextArea().append(time + log);
 	}
-
-
-	
-	
-	
 
 }

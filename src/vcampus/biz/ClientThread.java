@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.sql.SQLException;
 
 import vcampus.dao.LoginDAO;
 import vcampus.vo.LoginFormEvent;
@@ -47,12 +48,30 @@ public class ClientThread extends Thread {
 			}
 			
 			
-			messageBack = MessageHandling.handleMessage(messageReceived);
+			try {
+				messageBack = MessageHandling.handleMessage(messageReceived);
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
 			
 			
 			//send back the msg
 			try {
-				oos.writeObject(messageBack);
+					oos.writeObject(messageBack);
+				
+				
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -72,12 +91,17 @@ public class ClientThread extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 
 		
 	}
 
 	public void setThreadListener(ThreadListener threadListener) {
 		this.threadListener = threadListener;
+	}
+	
+	public void stopThread() {
+		this.runThreadFlag = false;
 	}
 
 	public int getID() {
