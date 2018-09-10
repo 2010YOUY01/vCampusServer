@@ -16,14 +16,5 @@ public class InfoDAO {
 		return personInfo;
 	}
 	
-	//修改用户信息
-	//根据personInfo确定一个用户是否存在
-	//如果不存在，返回false
-	//如果存在，用personInfo覆盖原来的PersonInfo类详细资料
-	public boolean changePersonInfo(PersonInfo personInfo) {
-		boolean changeSucceedFlag = false;
-		
-		
-		return changeSucceedFlag;
-	}
+	
 }

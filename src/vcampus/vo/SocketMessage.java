@@ -51,7 +51,11 @@ public class SocketMessage implements Serializable{
 		RETURN_BOOK_SUCCEED,
 		RETURN_BOOK_FAIL,
 		CHECK_LIBRARY_HISTORY, //²éÑ¯½èÔÄ¼ÇÂ¼
-		PASSING_DATA;
+		PASSING_DATA,
+		CHECK_COURSE_SELECTED,
+		COURSE_SELECTED,
+		COURSE_NOT_SELECTED,
+		LOGOUT;
 		
 		
 	}

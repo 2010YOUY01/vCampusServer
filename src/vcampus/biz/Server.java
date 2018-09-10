@@ -31,7 +31,6 @@ public class Server implements ThreadListener {
 
 	public void runServer() throws IOException {
 		runningFlag = true;
-
 		ServerSocket serverSocket = new ServerSocket(port);
 		while (runningFlag) {
 			System.out.println("Server wating on port " + port);
@@ -44,11 +43,10 @@ public class Server implements ThreadListener {
 			// use accepted socket to create a new client thread
 			System.out.println("dealing with clientSocket");
 			ClientThread clientThread = new ClientThread(clientSocket, ++uID);
-			size++;
 			clientThread.setThreadListener(this);
 			// add the thread to list
 			clientThreadList.add(clientThread);
-			serverGUI.getTextOnlineNum().setText(size + "");
+			
 			clientThread.start();
 		}
 
@@ -66,7 +64,7 @@ public class Server implements ThreadListener {
 			tmpClientThread.getClientSocket().close();
 			tmpClientThread.interrupt();
 		}
-		serverGUI.getTextOnlineNum().setText(size + "");
+		
 		System.out.println("close server");
 	}
 
@@ -94,7 +92,7 @@ public class Server implements ThreadListener {
 			ClientThread tmpThread = clientThreadList.get(i);
 			if (tmpThread.getID() == id) {
 				clientThreadList.remove(i);
-				serverGUI.getTextOnlineNum().setText(size + "");
+				
 				return;
 			}
 		}
@@ -106,6 +104,20 @@ public class Server implements ThreadListener {
 		Calendar calendar = Calendar.getInstance();
 		String time = dateFormat.format(calendar.getTime());
 		serverGUI.getTextArea().append(time + log);
+	}
+
+	@Override
+	public void Login() {
+		size++;
+		serverGUI.getTextOnlineNum().setText(size + "");
+		
+	}
+
+	@Override
+	public void Logout() {
+		size--;
+		serverGUI.getTextOnlineNum().setText(size + "");
+		
 	}
 
 }

@@ -79,10 +79,35 @@ public class MessageHandling {
 		case GET_ALL_COURSE:
 			msgBack = getAllCourse(msg);
 			break;
+		case CHECK_COURSE_SELECTED:
+			msgBack = checkCourseSelected(msg);
 
 		}
 		return msgBack;
 
+	}
+
+
+
+
+
+
+	private static SocketMessage checkCourseSelected(SocketMessage msg) {
+		// init DAO, msg
+		SocketMessage msgBack = new SocketMessage("server", SocketMessage.TYPE.PASSING_DATA);
+		CourseDAO courseDAO = new CourseDAO();
+		// deal with received msg
+		String username = msg.getUsername();
+		int courseUID = (int) msg.getObj();
+		boolean selectSucceedFlag = courseDAO.checkCourseSelected(username, courseUID);
+		// modify msgBack
+		if (selectSucceedFlag == true) {
+			msgBack.setType(SocketMessage.TYPE.COURSE_SELECTED);
+		} else {
+			msgBack.setType(SocketMessage.TYPE.COURSE_NOT_SELECTED);
+		}
+
+		return msgBack;
 	}
 
 
@@ -129,7 +154,7 @@ public class MessageHandling {
 		int bookUID = (int) msg.getObj();
 		boolean borrowSucceedFlag = libraryDAO.borrowBook(username, bookUID);
 		// modify msgBack
-		if(borrowSucceedFlag = true) {
+		if(borrowSucceedFlag == true) {
 			msgBack.setType(SocketMessage.TYPE.BORROW_BOOK_SUCCEED);
 		}else {
 			msgBack.setType(SocketMessage.TYPE.BORROW_BOOK_FAIL);
@@ -226,7 +251,7 @@ public class MessageHandling {
 		int productID = (int)msg.getObj();
 		boolean buySucceedFlag = shopDAO.buyProduct(username, productID);
 		// modify msgBack
-		if(buySucceedFlag = true) {
+		if(buySucceedFlag == true) {
 			msgBack.setType(SocketMessage.TYPE.BUY_PRODUCT_SUCCEED);
 		}
 		else {

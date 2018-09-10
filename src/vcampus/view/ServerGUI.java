@@ -69,6 +69,7 @@ public class ServerGUI extends JFrame {
 	}
 	
 	public ServerGUI () {
+		
 		setTitle("vCampus Server");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 777, 507);
@@ -175,6 +176,8 @@ public class ServerGUI extends JFrame {
 		lblNewLabel.setIcon(new ImageIcon(ServerGUI.class.getResource("/material/\u540E\u53F0\u80CC\u666F.png")));
 		lblNewLabel.setBounds(0, 0, 759, 334);
 		contentPane.add(lblNewLabel);
+		
+		getTextOnlineNum().setText(0+"");
 	}
 	
 

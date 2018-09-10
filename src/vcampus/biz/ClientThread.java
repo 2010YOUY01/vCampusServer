@@ -49,7 +49,14 @@ public class ClientThread extends Thread {
 			
 			
 			try {
+				if(messageReceived.getType().equals(SocketMessage.TYPE.LOGOUT)) {
+					threadListener.Logout();
+					return;
+				}
 				messageBack = MessageHandling.handleMessage(messageReceived);
+				if(messageBack.getType().equals(SocketMessage.TYPE.LOGINSUCCEED)) {
+					threadListener.Login();
+				}
 			} catch (InstantiationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

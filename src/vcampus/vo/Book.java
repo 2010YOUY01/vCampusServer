@@ -1,6 +1,8 @@
 package vcampus.vo;
 
-public class Book {
+import java.io.Serializable;
+
+public class Book implements Serializable{
 	private int uID;//0
 	private String ISBN;//9787121095467
 	private String bookName;//计算机组成原理
