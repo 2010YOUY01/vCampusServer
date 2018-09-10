@@ -24,6 +24,10 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Timer;
 import java.awt.event.ActionEvent;
+import java.awt.Color;
+import javax.swing.ImageIcon;
+import java.awt.Font;
+import javax.swing.SwingConstants;
 
 public class ServerGUI extends JFrame {
 
@@ -67,30 +71,56 @@ public class ServerGUI extends JFrame {
 	public ServerGUI () {
 		setTitle("vCampus Server");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 756, 460);
+		setBounds(100, 100, 777, 507);
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
-		JLabel label = new JLabel("\u5F53\u524D\u65F6\u95F4");
+		JLabel lblCurrentTime = new JLabel("current time:");
+		lblCurrentTime.setForeground(Color.WHITE);
+		lblCurrentTime.setFont(new Font("Eras Light ITC", Font.PLAIN, 24));
+		lblCurrentTime.setBounds(19, 95, 152, 35);
 		
-		JLabel label_1 = new JLabel("\u5728\u7EBF\u4EBA\u6570");
+		JLabel lblOnlineNumber = new JLabel("online number:");
+		lblOnlineNumber.setFont(new Font("Eras Light ITC", Font.PLAIN, 24));
+		lblOnlineNumber.setForeground(Color.WHITE);
+		lblOnlineNumber.setBounds(19, 152, 166, 33);
 		
-		JLabel label_3 = new JLabel("\u76D1\u542C\u7AEF\u53E3");
+		JLabel lblServerStatus = new JLabel("port:");
+		lblServerStatus.setFont(new Font("Eras Light ITC", Font.PLAIN, 24));
+		lblServerStatus.setForeground(Color.WHITE);
+		lblServerStatus.setBounds(19, 205, 152, 35);
 		
 		textOnlineNum = new JTextField();
+		textOnlineNum.setBackground(new Color(34,87,201));
+		textOnlineNum.setForeground(Color.WHITE);
+		textOnlineNum.setFont(new Font("Eras Light ITC", Font.PLAIN, 24));
+		textOnlineNum.setBounds(199, 152, 135, 31);
 		textOnlineNum.setEditable(false);
 		textOnlineNum.setColumns(10);
+		textOnlineNum.setBorder(null);
 		
 		textPort = new JTextField();
 		textPort.setEditable(false);
+		textPort.setFont(new Font("Eras Light ITC", Font.PLAIN, 24));
+		textPort.setForeground(Color.WHITE);
+		textPort.setBackground(new Color(34,87,201));
+		textPort.setBounds(199, 205, 135, 32);
 		textPort.setColumns(10);
+		textPort.setBorder(null);
 		
 		JLabel lblServerLog = new JLabel("Server Log");
+		lblServerLog.setFont(new Font("Eras Light ITC", Font.PLAIN, 20));
+		lblServerLog.setForeground(Color.WHITE);
+		lblServerLog.setBounds(348, 13, 124, 24);
 		
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(348, 50, 371, 242);
 		
-		btnLogin = new JButton("\u542F\u52A8\u670D\u52A1\u5668");
+		btnLogin = new JButton("");
+		btnLogin.setIcon(new ImageIcon(ServerGUI.class.getResource("/material/\u5F00\u542F\u670D\u52A1\u5668.png")));
+		btnLogin.setBounds(96, 358, 196, 64);
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// OK start the server
@@ -103,12 +133,9 @@ public class ServerGUI extends JFrame {
 			}
 		});
 		
-		
-		
-		//JLabel timeLabel = new JLabel("New label");
-		ClockLabel timeLabel = new ClockLabel("time");
-		
-		btnLogout = new JButton("\u5173\u95ED\u670D\u52A1\u5668");
+		btnLogout = new JButton("");
+		btnLogout.setIcon(new ImageIcon(ServerGUI.class.getResource("/material/\u5173\u95ED\u670D\u52A1\u5668.png")));
+		btnLogout.setBounds(453, 358, 196, 64);
 		btnLogout.setEnabled(false);
 		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -119,65 +146,35 @@ public class ServerGUI extends JFrame {
 				return;
 			}
 		});
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(label)
-								.addComponent(label_1)
-								.addComponent(label_3))
-							.addGap(32)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(textOnlineNum, GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
-								.addComponent(timeLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(textPort, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE))
-							.addGap(71))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(btnLogin)
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(btnLogout)
-							.addGap(40)))
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblServerLog)
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 371, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(51, Short.MAX_VALUE))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(106)
-					.addComponent(lblServerLog)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(label)
-								.addComponent(timeLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(24)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(label_1)
-								.addComponent(textOnlineNum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(textPort, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(label_3))
-							.addGap(36)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnLogin)
-								.addComponent(btnLogout)))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(14)
-							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 242, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(27, Short.MAX_VALUE))
-		);
 		
 		textArea = new JTextArea();
 		scrollPane.setViewportView(textArea);
-		contentPane.setLayout(gl_contentPane);
+		contentPane.setLayout(null);
+		
+		
+		
+		//JLabel timeLabel = new JLabel("New label");
+		ClockLabel timeLabel = new ClockLabel("time");
+		timeLabel.setFont(new Font("ººÒÇÏ¸Ô²¼ò", Font.PLAIN, 24));
+		timeLabel.setBounds(162, 95, 183, 40);
+		timeLabel.setForeground(Color.WHITE);
+		timeLabel.setHorizontalAlignment(SwingConstants.LEADING);
+		contentPane.add(timeLabel);
+		contentPane.add(lblCurrentTime);
+		contentPane.add(lblOnlineNumber);
+		contentPane.add(lblServerStatus);
+		contentPane.add(textOnlineNum);
+		contentPane.add(textPort);
+		contentPane.add(lblServerLog);
+		contentPane.add(scrollPane);
+		contentPane.add(btnLogin);
+		contentPane.add(btnLogout);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblNewLabel.setIcon(new ImageIcon(ServerGUI.class.getResource("/material/\u540E\u53F0\u80CC\u666F.png")));
+		lblNewLabel.setBounds(0, 0, 759, 334);
+		contentPane.add(lblNewLabel);
 	}
 	
 
@@ -217,10 +214,4 @@ public class ServerGUI extends JFrame {
 			server = null;
 		}
 	}
-
-	
-	
-	
-	
-	
 }

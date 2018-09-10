@@ -11,7 +11,7 @@ public class DataConnection {
 public static Connection getConnection() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 	 try{
 		 Class.forName("com.hxtt.sql.access.AccessDriver").newInstance();
-		 Connection conn = DriverManager.getConnection("jdbc:Access:///C:/Users/90480/Documents/Tencent Files/904801558/FileRecv/eCampus.accdb","","");
+		 Connection conn = DriverManager.getConnection("jdbc:Access:///./eCampus.accdb","","");
 	     return conn; 
 	 }
 	 catch(Exception e){}
